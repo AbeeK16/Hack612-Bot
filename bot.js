@@ -21,6 +21,8 @@ client.on('message', async message => {
              4) create voice channel with role permission   
         */
 
+        //include check permissions for user and add security
+        //check if its command and users w/o the desired group
         if (msg[0] === '~create'){
             if (msg.length === 1){
                 message.channel.send('It seems you have forgotten to mention the group you want to make!')
@@ -31,39 +33,51 @@ client.on('message', async message => {
             else{
             
             /* list for future embed
+            //.setColor(0x5FB5C7) //logo blue
                 message.channel.send("Role " + msg[1] +" succesfully made!")
-                
+                message.channel.send(`Role ${role.name} has been added to <@${
+                    mentions[i].id
+                  }>.`);
+                message.channel.send(tchan.name + 'found. Deleting...')
+                message.channel.send(vchan.name + ' VC found. Deleting?')
+                message.channel.send(vchan.name + ' role found. Deleting?')
+
+
             */
             
             //role generation
             var role = await message.guild.roles.create({ // Creating the role.
                 data: {
                     name: msg[1],
-                    color: 0x979c9f
+                    color: 0x979c9f,
+                    //permissions: defualt perms are the @everyone perms in the server
                 }
-            }).catch((e) => console.error(`Couldn't create role. | ${e}`)); // Catching for errors.
+            }).catch((e) => message.channel.send(`Couldn't create role. | ${e}`));
             
             
             //adding users if mentioned
-            message.channel.send(role.name + ' found! Now assigning...');
             if(message.mentions.members.size > 0){
                 const mentions = message.mentions.members.array();
                 for (var i = 0; i < mentions.length; i++) {
-                    //mentions[i].roles.add(role)
-                    mentions[i].roles.add(role).then(() => { // Adding the role to the member.
-                message.channel.send(`Role ${role.name} has been added to <@${mentions[i].id}>`); // Sending a message if the role has been added.
-            }).catch((e) => console.error(`Couldn't add role. | ${e}`)); // Catching for errors.
+                    mentions[i].roles.add(role).catch((e) => message.channel.send(`Couldn't add role. | ${e}`));
+                    //make an array of the members that were given the role for line 36
                 }
             }
             
             //text channel generation
             message.guild.channels.create(msg[1], {
-                type: 'text'
+                type: 'text',
+                permissionOverwrites:[
+                    {
+                        id: message.guild.roles.everyone,
+                        deny: ['VIEW_CHANNEL']
+                    }
+                ]
                 }).then((channel) => {
                 const catID = '784533297266819123'
                 const finalID = '794016051653640202'
                 channel.setParent(catID) //change to finalID
-                //channel.overwritePermissions(channel.guild.roles.msg[1], {VIEW_CHANNEL : 'true'})
+                //channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
                 
             })
             //voice channel generation
@@ -73,12 +87,77 @@ client.on('message', async message => {
                 const catID = '678054215033028610'
                 const finalID = '757335055797583964' 
                 channel.setParent(catID) //change to finalID
-            }) 
+            })
             message.channel.send("Group successfully created!")
             }
         }
-        if (msg[0] === '~help' || msg[0] === '~halp' || msg[0] === '~list'){
-            message.channel.send('I will help you my child. 🧖') //print out a list later
+        if(msg[0] === '~delete'){
+            if (msg.length === 1){
+                message.channel.send('It seems you have forgotten to mention the group you want to delete!')
+            }
+            else if(message.guild.roles.cache.find(x => x.name === msg[1]) === undefined){
+                message.channel.send('Group role does not exist.')
+            }
+            else{
+                //check for TC, VC and role seperately
+                const tchan = message.guild.channels.cache.find(r => r.name === msg[1]);
+                tchan.delete();
+                
+                const vchan = message.guild.channels.cache.find(r => r.name === msg[1]+'-voice');
+                vchan.delete();
+
+                const rl = message.guild.roles.cache.find(r => r.name === msg[1]);
+                rl.delete();
+                message.channel.send("Group successfully removed!")
+
+            }
+        }
+        if(msg[0] === '~assign'){
+            if (msg.length === 1){
+                message.channel.send('It seems you have forgotten to mention the group you want to add users to!')
+            }
+            else if(message.guild.roles.cache.find(x => x.name === msg[1]) === undefined){
+                message.channel.send('Group role does not exist.')
+            }
+            else{            
+                const rl = message.guild.roles.cache.find(r => r.name === msg[1]);
+                if(message.mentions.members.size > 0){
+                    const mentions = message.mentions.members.array();
+                    for (var i = 0; i < mentions.length; i++) {
+                        mentions[i].roles.add(rl).catch((e) => message.channel.send(`Couldn't add role. | ${e}`));
+                        //make an array of the members that were given the role for line 35
+                    }
+                    message.channel.send("Roles successfully added to users.")
+                }
+                else{
+                    message.channel.send("Must mention users to assign role to.")
+                }
+            }
+        }
+        if (msg[0] === '~help' || msg[0] === '~halp' || msg[0] === '~list' || msg[0] === '~hjalp' || msg[0] === '~h'){
+            const exrich = new Discord.MessageEmbed()
+            .setColor(0xD4A338) //captain role gold
+            .setTitle('Commands')
+            .addFields(
+                {
+                    name: '**__Create Group__**',
+                    value: '*Format:* ~create [group#] [OPTIONAL: `@user1`, `@user2`, etc.] \n *Example:* "~create group8 `@janice` `@anoop` `@abhi`", "~create group3" \n *Description:* Create a group of participants by giving a group number/name and mentioning users if avaiable.'
+                },
+                {
+                    name: '**__Assign to Group__**',
+                    value: '*Format:* ~assign [group#] [`@user1`, `@user2`, etc.] \n *Example:* "~assign group3 `@arjun `@emile`" \n *Description:* Assign additional members to an already existing group.'
+                },
+                {
+                    name: "**__Delete Group__**",
+                    value: '*Format:* ~delete [group#] \n *Example:* "~delete group8" \n *Description:* Delete an already existent group.'
+                },
+                {
+                    name: "**__Mention User__**",
+                    value: "hehehe abhi goes brrr"
+                }
+            )
+            .setFooter('I will help you my child.🧖')
+            message.channel.send(exrich);
         }
         if (msg[0] === '~mentionUser'){
             let member = message.mentions.members.first();
@@ -86,6 +165,18 @@ client.on('message', async message => {
                 member.id
               }> has been mentioned.`)
         }
+        if(msg[0] === '~rich'){
+            const exrich = new Discord.MessageEmbed()
+            .setColor('GREEN')
+            .setTitle('Test Embed')
+            .addFields(
+                { name: 'Inline field title', value: 'Some value here', inline: true },
+                { name: 'Inline field title2', value: 'Some value here2', inline: true },
+            )
+            message.channel.send(exrich);
+        }
+        //say gn, gm, fun stuff available to public
+        //meaning, set a diff channel ID and diff commands then, or check all perms
     }
     
 })
