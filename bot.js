@@ -77,7 +77,7 @@ client.on('message', async message => {
                 const catID = '784533297266819123'
                 const finalID = '794016051653640202'
                 channel.setParent(catID) //change to finalID
-                //channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
+                channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
                 
             })
             //voice channel generation
@@ -145,7 +145,7 @@ client.on('message', async message => {
                 },
                 {
                     name: '**__Assign to Group__**',
-                    value: '*Format:* ~assign [group#] [`@user1`, `@user2`, etc.] \n *Example:* "~assign group3 `@arjun `@emile`" \n *Description:* Assign additional members to an already existing group.'
+                    value: '*Format:* ~assign [group#] [`@user1`, `@user2`, etc.] \n *Example:* "~assign group3 `@arjun` `@emile`" \n *Description:* Assign additional members to an already existing group.'
                 },
                 {
                     name: "**__Delete Group__**",
@@ -158,6 +158,11 @@ client.on('message', async message => {
             )
             .setFooter('I will help you my child.🧖')
             message.channel.send(exrich);
+        }
+        if(msg[0] === '~repeat'){
+            if(message.content.replace('~repeat ','').toLowerCase() === 'im stupid' || message.content.replace('~repeat ','').toLowerCase() === "i'm stupid") message.channel.send('Yeah, we know.');
+            else if(message.content.toLowerCase().includes('abhi')) message.channel.send('the bee is a god(dess)');
+            else message.channel.send(message.content.replace('~repeat', ''));
         }
         if (msg[0] === '~mentionUser'){
             let member = message.mentions.members.first();
@@ -174,6 +179,12 @@ client.on('message', async message => {
                 { name: 'Inline field title2', value: 'Some value here2', inline: true },
             )
             message.channel.send(exrich);
+        }
+        if (msg[0] === '~gn'){
+            let member = message.member;
+            message.channel.send('Goodnight, ' +
+                member.displayName
+              + '! 🥰')
         }
         //say gn, gm, fun stuff available to public
         //meaning, set a diff channel ID and diff commands then, or check all perms
