@@ -184,9 +184,16 @@ client.on('message', async message => {
             let member = message.member;
             message.channel.send('Goodnight, ' +
                 member.displayName
-              + '! 🥰')
+              + '! 😴')
+        }
+        if (msg[0] === '~gm'){
+            let member = message.member;
+            message.channel.send('Goodmorning, ' +
+                member.displayName
+              + '! 🤩')
         }
         //say gn, gm, fun stuff available to public
+        //request help from help center
         //meaning, set a diff channel ID and diff commands then, or check all perms
     }
     
