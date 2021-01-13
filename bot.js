@@ -23,7 +23,7 @@ client.on('message', async message => {
 
         //include check permissions for user and add security
         //check if its command and users w/o the desired group
-        if (msg[0] === '~create'){
+        if (msg[0] === '~create' && message.member.hasPermission('ADMINISTRATOR')){
             if (msg.length === 1){
                 message.channel.send('It seems you have forgotten to mention the group you want to make!')
             }
@@ -91,28 +91,31 @@ client.on('message', async message => {
             message.channel.send("Group successfully created!")
             }
         }
-        if(msg[0] === '~delete'){
+        if(msg[0] === '~delete' && message.member.hasPermission('ADMINISTRATOR')){
             if (msg.length === 1){
                 message.channel.send('It seems you have forgotten to mention the group you want to delete!')
             }
-            else if(message.guild.roles.cache.find(x => x.name === msg[1]) === undefined){
-                message.channel.send('Group role does not exist.')
+            else if((message.guild.roles.cache.find(x => x.name === msg[1]) === undefined) && (message.guild.channels.cache.find(x => x.name === msg[1]) === undefined) && (message.guild.channels.cache.find(x => x.name === msg[1]+'-voice') === undefined)){
+                message.channel.send('Group does not exist.')
             }
             else{
                 //check for TC, VC and role seperately
                 const tchan = message.guild.channels.cache.find(r => r.name === msg[1]);
-                tchan.delete();
+                if(tchan !== undefined) tchan.delete();
+                else message.channel.send('TC not existent.')
                 
                 const vchan = message.guild.channels.cache.find(r => r.name === msg[1]+'-voice');
-                vchan.delete();
+                if(vchan !== undefined) vchan.delete();
+                else message.channel.send('VC not existent.')
 
                 const rl = message.guild.roles.cache.find(r => r.name === msg[1]);
-                rl.delete();
+                if(rl !== undefined) rl.delete();
+                else message.channel.send('Role not existent.')
                 message.channel.send("Group successfully removed!")
 
             }
         }
-        if(msg[0] === '~assign'){
+        if(msg[0] === '~assign' && message.member.hasPermission('ADMINISTRATOR')){
             if (msg.length === 1){
                 message.channel.send('It seems you have forgotten to mention the group you want to add users to!')
             }
@@ -141,7 +144,7 @@ client.on('message', async message => {
             .addFields(
                 {
                     name: '**__Create Group__**',
-                    value: '*Format:* ~create [group#] [OPTIONAL: `@user1`, `@user2`, etc.] \n *Example:* "~create group8 `@janice` `@anoop` `@abhi`", "~create group3" \n *Description:* Create a group of participants by giving a group number/name and mentioning users if avaiable.'
+                    value: '*Format:* ~create [group#] [OPTIONAL: `@user1`, `@user2`, etc.] \n *Example:* "~create group8 `@janice` `@anoop` `@abhi` `@salma`", "~create group3" \n *Description:* Create a group of participants by giving a group number/name and mentioning users if avaiable.'
                 },
                 {
                     name: '**__Assign to Group__**',
