@@ -11,7 +11,7 @@ client.on('message', async message => {
     const msg = message.content.split(" ")
     const chanID = '793958030407630888' // for bot-testing
     const finalchanID = '794016051653640202' // for Hack612
-    if(message.channel.id === chanID){ //change to finalchanID
+    if(message.channel.id === finalchanID){ //change to finalchanID
         /*Create a group and assign it members
         template: ~create GROUPNAME USER1 USER2 and so on (USERS are optional)
         samples: ~create group10, ~create group3 @abeeK @snopp doog @jan mice
