@@ -65,7 +65,7 @@ client.on('message', async message => {
             }
             
             //text channel generation
-            message.guild.channels.create(msg[1], {
+            /*message.guild.channels.create(msg[1], {
                 type: 'text',
                 permissionOverwrites:[
                     {
@@ -79,7 +79,17 @@ client.on('message', async message => {
                 channel.setParent(finalID) //change to finalID
                 channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
                 
+            }) */
+
+            message.guild.channels.create(msg[1], {
+                type: 'text'
+                }).then((channel) => {
+                //const catID = '678054215033028610'
+                const finalID = '757335055797583963' 
+                channel.setParent(finalID) //change to finalID
+                channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
             })
+
             //voice channel generation
             message.guild.channels.create(msg[1] + '-voice', {
                 type: 'voice'
@@ -89,6 +99,7 @@ client.on('message', async message => {
                 channel.setParent(finalID) //change to finalID
                 channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
             })
+
             message.channel.send("Group successfully created!")
             }
         }
