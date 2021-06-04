@@ -157,7 +157,7 @@ client.on('message', async message => {
                 },
                 {
                     name: "**__Mention User__**",
-                    value: "hehehe abhi goes brrr"
+                    value: "hehehe abhiiiiiiiii mode goes brrr"
                 }
             )
             .setFooter('I will help you my child.🧖')
