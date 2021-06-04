@@ -74,8 +74,8 @@ client.on('message', async message => {
                     }
                 ]
                 }).then((channel) => {
-                const catID = '784533297266819123'
-                const finalID = '794016051653640202'
+                //const catID = '784533297266819123'
+                const finalID = '757335055797583963'
                 channel.setParent(finalID) //change to finalID
                 channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
                 
@@ -84,9 +84,10 @@ client.on('message', async message => {
             message.guild.channels.create(msg[1] + '-voice', {
                 type: 'voice'
                 }).then((channel) => {
-                const catID = '678054215033028610'
+                //const catID = '678054215033028610'
                 const finalID = '757335055797583964' 
                 channel.setParent(finalID) //change to finalID
+                channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
             })
             message.channel.send("Group successfully created!")
             }
