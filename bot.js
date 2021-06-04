@@ -76,7 +76,7 @@ client.on('message', async message => {
                 }).then((channel) => {
                 const catID = '784533297266819123'
                 const finalID = '794016051653640202'
-                channel.setParent(catID) //change to finalID
+                channel.setParent(finalID) //change to finalID
                 channel.overwritePermissions(channel.guild.roles.cache.msg[1], {VIEW_CHANNEL : 'true'})
                 
             })
@@ -86,7 +86,7 @@ client.on('message', async message => {
                 }).then((channel) => {
                 const catID = '678054215033028610'
                 const finalID = '757335055797583964' 
-                channel.setParent(catID) //change to finalID
+                channel.setParent(finalID) //change to finalID
             })
             message.channel.send("Group successfully created!")
             }
