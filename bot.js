@@ -112,6 +112,10 @@ client.on('message', async message => {
             }
             else{
                 //check for TC, VC and role seperately
+                /*const tchan = message.guild.channels.cache.find(r => r.name === msg[1]+'');
+                if(tchan !== undefined) tchan.delete();
+                else message.channel.send('TC not existent.')*/
+
                 const tchan = message.guild.channels.cache.find(r => r.name === msg[1]);
                 if(tchan !== undefined) tchan.delete();
                 else message.channel.send('TC not existent.')
@@ -123,7 +127,7 @@ client.on('message', async message => {
                 const rl = message.guild.roles.cache.find(r => r.name === msg[1]);
                 if(rl !== undefined) rl.delete();
                 else message.channel.send('Role not existent.')
-                message.channel.send("Group successfully removed!")
+                message.channel.send("Group successfully removed!!!!!")
 
             }
         }
